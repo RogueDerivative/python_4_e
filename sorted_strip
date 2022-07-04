@@ -32,18 +32,37 @@ if len(name) < 1:
 handle = open(name)
 
 # my code
-counts = dict()
-for line in handle:
-    line = line.rstrip() # strip whitespace
-    if line.startswith('From '):
-        words = line.split() # split line into words
-        times = words[5] # grab the 6th word
-        hours = times.split(':') # split the 6th word (hour mark) by colon
-        if hours[0] in counts:
-            counts[hours[0]] = counts.get(hours[0],0) + 1
-        else:
-            counts[hours[0]] = 1 # grab each hour mark and count them
+counts = dict() # create a dictionary to fill 
 
-my_sort = sorted([(k,v) for k,v in counts.items()]) # temporary tuple
-for (k,v) in my_sort:
+# create a for loop to iterate through the file reading it line by line
+for line in handle:
+
+# a good step is to remove extra whitespace
+.rstrip() # strip whitespace
+
+# only look at emails that were received:
+startswith('From ')
+
+# split the lines into words
+.split() 
+
+# this program requires students to not use regex, fortunately the lines are short and we can easily grab the 6th word in the line
+words[5]
+
+# the 6th word is a time stamp in the form 00:00:00
+# need to split that word by the colon
+.split(':') 
+
+# here we can grab the hour mark (the first time), count it, then store the information in the pre-defined dictionary
+if hours[0] in counts:
+     counts[hours[0]] = counts.get(hours[0],0) + 1
+else:
+     counts[hours[0]] = 1 # grab each hour mark and count them
+     
+# the dictionary needs to be sorted by the keys, from smallest to largest
+# (I don't believe anyone would mind sharing this great, simple, code)
+sorted([(k,v) for k,v in counts.items()]) # temporary tuple
+
+# Need to store this sort in a temporary variable and then print the result
+for (k,v) in [temporary_variable]:
     print(k,v)
