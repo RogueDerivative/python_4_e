@@ -17,22 +17,34 @@ if len(name) < 1:
 handle = open(name)
 
 # my code
+# create an empty dictionary
 counts = dict()
-for line in handle:
-    line = line.rstrip() # remove whitespace
-    if line.startswith('From '): # only want emails that are received and not sent
-        words = line.split() # split the line into words
-        # grab the email address and count them
+
+# write a for loop to iterate through the lines of the text file
+for x in y:
+    ...
+
+# a good idea is to remove whitespace
+.rstrip() 
+
+# create a conditional statement to only look for the lines that start with 'From ' *** the space is important since 'From:' exists
+.startswith('From '): 
+
+# split those lines we want into words
+.split()
+
+# without using a regex grab the email address that is in the second position of the line and count them
+
         if words[1] in counts:
             counts[words[1]] = counts.get(words[1],0) + 1
         else:
             counts[words[1]] = 1
+            
+ # build a for loop to iterate through the dictionary to build a histogram of words
 
 most_word_count = None
 most_word = None
 for word, count in counts.items():
-    if most_word_count is None or count > most_word_count:
-        most_word = word
-        most_word_count = count
 
+# print the results
 print(most_word, most_word_count)
