@@ -1,2 +1,2 @@
 # python_4_e
-My code for the assignments in the Python for Everybody Specialization from Coursera 
+My thought process for the assignments in the Python for Everybody Specialization from Coursera 
