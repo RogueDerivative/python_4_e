@@ -1,0 +1,45 @@
+# regex assignment
+##Finding Numbers in a Haystack
+##
+##In this assignment you will read through and parse a file with text and numbers.
+##You will extract all the numbers in the file and compute the sum of the numbers.
+##
+
+## actual sum ends in 721
+
+# imports
+import os
+import re
+
+# set wd
+path = 'D:\\data_science\\python\\python_for_everybody'
+os.chdir(path)
+
+
+# create global variables
+num_list = []
+nums = []
+# get the file
+handle = open('actual_regex_data.txt')
+
+# read the lines and find the numbers
+# the goal is to use the findall() function in the re package
+for line in handle:
+    line = line.strip()
+    char_list = re.findall('[0-9]+', line)
+    if len(char_list) > 0:
+        num_list.append(char_list)
+
+# the issue here is that char_list has additional lists inside it
+# since some of the lines in txt file had more than one number in the line
+# now I need to pull each character number out of each value in the list
+# i.e. for a new index cycle through each list inside num_list to extract
+# every value within each sub list
+# this appears to be a common thing to do since most resources refer to this type of
+# problem as "flattening" a list of lists
+    
+# Section 10.9 of python4e - list comprehension
+# convert each character number into an integer
+num_ints = [int(num) for num in nums]
+# print the sum of the integers
+print(sum(num_ints))
