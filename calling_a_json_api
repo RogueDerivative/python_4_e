@@ -1,0 +1,158 @@
+# Calling a JSON API
+
+# In this assignment you will write a Python program somewhat similar 
+# to http://www.py4e.com/code3/geojson.py. The program will prompt for a location, 
+# contact a web service and retrieve JSON for the web service and parse that data,
+# and retrieve the first place_id from the JSON. A place ID is a textual identifier
+# that uniquely identifies a place as within Google Maps.
+
+
+# library imports
+import urllib.request, urllib.parse, urllib.error
+import json
+import ssl
+
+# the instructor provided api to access Google Maps static pages
+if api_key is False:
+    api_key = 42
+    serviceurl = 'http://py4e-data.dr-chuck.net/json?'
+else :
+    serviceurl = 'https://maps.googleapis.com/maps/api/geocode/json?'
+
+# Ignore SSL certificate errors
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+# program to grab the json formatted data, loop through the json, print the 
+# long and lat for a place in Google Maps
+
+while True:
+    address = input('Enter location: ')
+    if len(address) < 1: break # the program keeps asking for another place until enter is entered with 0 characters at the prompt
+
+    parms = dict() " key, value pairs
+    parms['address'] = address # "value"
+    if api_key is not False: parms['key'] = api_key # "key"
+    url = serviceurl + urllib.parse.urlencode(parms) # format user input into Google's format
+
+    print('Retrieving', url)
+    uh = urllib.request.urlopen(url, context=ctx)
+    data = uh.read().decode() # convert to byte object
+    print('Retrieved', len(data), 'characters')
+
+# check that the location exists in the static Google Map API
+    try:
+        js = json.loads(data)
+    except:
+        js = None
+
+    if not js or 'status' not in js or js['status'] != 'OK':
+        print('==== Failure To Retrieve ====')
+        print(data)
+        continue
+
+    print(json.dumps(js, indent=4))
+
+    lat = js['results'][0]['geometry']['location']['lat']
+    lng = js['results'][0]['geometry']['location']['lng']
+    print('lat', lat, 'lng', lng)
+    location = js['results'][0]['formatted_address']
+    print(location)
+  
+  
+# run the program to see the format
+
+# Enter location: detroit
+#Retrieving http://py4e-data.dr-chuck.net/json?address=detroit&key=42
+#Retrieved 1731 characters
+#ChIJdR3LEAHKJIgR0sS5NU6Gdlc
+#PS D:\data_science\python\python_for_everybody> & "C:/Program Files/WindowsApps/PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0/python3.9.exe" d:/data_science/python/python_for_everybody/calling_a_json_api.py
+#Enter location: detroit
+#Retrieving http://py4e-data.dr-chuck.net/json?address=detroit&key=42
+#Retrieved 1731 characters
+#{
+#    "results": [
+#        {
+#            "address_components": [
+#                {
+#                    "long_name": "Detroit",
+#                    "short_name": "Detroit",
+#                    "types": [
+#                        "locality",
+#                        "political"
+#                    ]
+#                },
+#                {
+#                    "long_name": "Wayne County",
+#                    "short_name": "Wayne County",
+#                    "types": [
+#                        "administrative_area_level_2",
+#                        "political"
+#                    ]
+#                },
+#                {
+#                    "long_name": "Michigan",
+#                    "short_name": "MI",
+#                    "types": [
+#                        "administrative_area_level_1",
+#                        "political"
+#                    ]
+#                },
+#                {
+#                    "long_name": "United States",
+#                    "short_name": "US",
+#                    "types": [
+#                        "country",
+#                        "political"
+#                    ]
+#                }
+#            ],
+#            "formatted_address": "Detroit, MI, USA",
+#            "geometry": {
+#                "bounds": {
+#                    "northeast": {
+#                        "lat": 42.45023,
+#                        "lng": -82.910451
+#                    },
+#                    "southwest": {
+#                        "lat": 42.255192,
+#                        "lng": -83.287959
+#                    }
+#                },
+#                "location": {
+#                    "lat": 42.331427,
+#                    "lng": -83.0457538
+#                },
+#                "location_type": "APPROXIMATE",
+#                "viewport": {
+#                    "northeast": {
+#                        "lat": 42.45023,
+#                        "lng": -82.910451
+#                    },
+#                    "southwest": {
+#                        "lat": 42.255192,
+#                        "lng": -83.287959
+#                    }
+#                }
+#            },
+#            "place_id": "ChIJdR3LEAHKJIgR0sS5NU6Gdlc",
+#            "types": [
+#                "locality",
+#                "political"
+#            ]
+#        }
+#    ],
+#    "status": "OK"
+#}
+#lat 42.331427 lng -83.0457538
+#Detroit, MI, USA
+
+# make sense of the outputs
+# lat = js['results'][0]['geometry']['location']['lat']
+# js is the list that we will pull from
+# results is complex dictionary 
+# [0] means we want to look at the first thing
+# geometry is the list of location attributes
+# location is the dictionary of long lat key value pairs
+
